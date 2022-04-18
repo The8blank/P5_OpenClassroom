@@ -19,16 +19,15 @@ async function getData() {
       // 8. lit le contenu JSON dans le corps de la réponse
       const responseJSON = await response.json();
 
-      // 9.
 
-      // 10. Ajout des valeurs de la réponse et du panier dans l"objet grace a l'operateur spread
+      // 9. Ajout des valeurs de la réponse et du panier dans l"objet grace a l'operateur spread
       element = { ...responseJSON, ...panier[i] };
 
-      // 11. pousse une nouvelle donnée dans dataProduct avant de sortir de la fonction getData
+      // 10. pousse une nouvelle donnée dans dataProduct avant de sortir de la fonction getData
       dataProduct.push(element);
     }
   } else {
-  /* 5. si il n'y a pas de panier */
+    /* 5. si il n'y a pas de panier */
     /* 6. log panier vide */
     return console.log("panier vide");
   }
@@ -37,8 +36,9 @@ async function getData() {
 async function createCard() {
   /* 4. joue et attend la fin de la fonction getData */
   await getData();
+  
 
-  // 12. crée un nouveau tableau grâce à la méthode map et inject l'HTML
+  // 11. crée un nouveau tableau grâce à la méthode map et inject l'HTML
   cart__items.innerHTML = dataProduct.map(
     (
       element
@@ -65,30 +65,30 @@ async function createCard() {
 </article> `
   );
 
-  // 13. Appel la fonction changeQuantity
+  // 12. Appel la fonction changeQuantity
   changeQuantity();
 
-  // 26. appel la fonction price
+  // 25. appel la fonction price
   price();
 
-  // 36. appel la fonction supprimer
+  // 35. appel la fonction supprimer
   supprimer();
 }
 
 function changeQuantity() {
-  // 14. définit un tableau sur les input de la quantité
+  // 13. définit un tableau sur les input de la quantité
   input = document.querySelectorAll(`input[name='itemQuantity']`);
 
-  // 15. boucle qui parcour le tableau
+  // 14. boucle qui parcour le tableau
   for (let i = 0; i < input.length; i++) {
-    // 16. définit la constante éléments comme input
+    // 15. définit la constante éléments comme input
     const element = input[i];
 
-    // 17. écoute le changement de valeur
+    // 16. écoute le changement de valeur
     element.addEventListener("change", (e) => {
-      // 18. si la valeur est supérieur à 0 alors :
+      // 17. si la valeur est supérieur à 0 alors :
       if (element.value > 0) {
-        // 19. la valeur de l'input est affecter à la quanité du produit
+        // 18. la valeur de l'input est affecter à la quanité du produit
         for (const article of dataProduct) {
           if (
             e.srcElement.dataset.id == article._id &&
@@ -99,17 +99,17 @@ function changeQuantity() {
         }
 
         return (
-          // 20. retourne le tableau dataProduct
+          // 19. retourne le tableau dataProduct
           dataProduct,
-          // 21. retourne le tableau panier
+          // 20. retourne le tableau panier
           panier,
-          // 22. appel la fonction price pour recalculer les prix
+          // 21. appel la fonction price pour recalculer les prix
           price(),
-          // 23. changement de la valeur dans le code html
+          // 22. changement de la valeur dans le code html
           element.setAttribute("value", dataProduct[i].quantity),
-          // 24. modifie le panier
+          // 23. modifie le panier
           (panier[i].quantity = dataProduct[i].quantity),
-          //25. envoie le nouveau panier dans le locale storage
+          //24. envoie le nouveau panier dans le locale storage
           localStorage.setItem("panier", JSON.stringify(panier))
         );
       }
@@ -118,39 +118,39 @@ function changeQuantity() {
 }
 
 function price() {
-  // 27. crée le tableau quantityTotal qui contient la valeur 0 par défaut
+  // 26. crée le tableau quantityTotal qui contient la valeur 0 par défaut
   quantityTotal = [0];
 
-  // 28. crée le tableau priceTotal qui contient la valeur 0 par défaut
+  // 27. crée le tableau priceTotal qui contient la valeur 0 par défaut
   priceTotal = [0];
 
-  // 29. parcour le tableau dataProduct
+  // 28. parcour le tableau dataProduct
   dataProduct.forEach((element) => {
-    // 30. envoie les quantité des élément dans le tableau quantityTotal
+    // 29. envoie les quantité des élément dans le tableau quantityTotal
     quantityTotal.push(element.quantity);
 
-    // 31. envoie le prix des éléments multiplié par leurs quantité dans le tableau priceTotal
+    // 30. envoie le prix des éléments multiplié par leurs quantité dans le tableau priceTotal
     priceTotal.push(element.quantity * parseInt(element.price));
   });
 
-  // 32. additione les éléments du tableau quantityTotal grâce à la méthode éval()
+  // 31. additione les éléments du tableau quantityTotal grâce à la méthode éval()
   quantityTotal = eval(quantityTotal.join("+"));
 
-  //33. additione les éléments du tableau priceTotal grâce à la méthode eval()
+  //32. additione les éléments du tableau priceTotal grâce à la méthode eval()
   priceTotal = eval(priceTotal.join("+"));
 
-  // 34. inject la quantité total dans le code HTML
+  // 33. inject la quantité total dans le code HTML
   totalQuantity.innerText = quantityTotal;
 
-  // 35. inject le prix dans le code HTML
+  // 34. inject le prix dans le code HTML
   totalPrice.innerText = priceTotal;
 }
 
 function supprimer() {
-  // 37. crée le tableau btnSup
+  // 36. crée le tableau btnSup
   let btnSup = document.querySelectorAll("p.deleteItem");
 
-  // 38. parcour le tableau btnSup
+  // 37. parcour le tableau btnSup
   for (const btn of btnSup) {
     // 38. écoute les bouton supprimé sur l'evenement du click
     btn.addEventListener("click", (e) => {
@@ -169,8 +169,10 @@ function supprimer() {
       }
       // 39. si il y a plus d'un article dans le panier
       if (panier.length > 1) {
+        // 40 . crée un tableau avec les articles
         article = document.querySelectorAll("article.cart__item");
 
+        // 41 suprime le code htm de l'article séléctioné
         for (const element of article) {
           if (
             btn.dataset.id == element.dataset.id &&
@@ -179,7 +181,7 @@ function supprimer() {
             element.remove();
           }
         }
-
+        // 42. supprime l'élément du tableau panier
         panier = panier.filter((element) => {
           if (
             btn.dataset.id == element._id &&
@@ -190,7 +192,7 @@ function supprimer() {
             return true;
           }
         });
-
+        // 43. supprime l'élément du tableau dataProduct
         dataProduct = dataProduct.filter((element) => {
           if (
             btn.dataset.id == element._id &&
@@ -201,12 +203,160 @@ function supprimer() {
             return true;
           }
         });
-
-        return price(), localStorage.setItem("panier", JSON.stringify(panier));
+        // 44. retourne les prix actualisé et le panier
+        return price(), localStorage.setItem("panier", JSON.stringify(panier),changeQuantity());
       }
     });
   }
 }
 
 /* 3. joue la fonction create card */
-createCard();
+
+createCard()
+
+async function checkOut() {
+
+  // Validation prénom
+  const validFirstName = function (input) {
+    let testName = /^[a-zA-Z ,.'-]+$/.test(input);
+
+    if (testName) {
+      firstNameErrorMsg.innerText = "";
+      return true;
+    } else {
+      firstNameErrorMsg.innerText = "Prénom incorect";
+      return false;
+    }
+  };
+
+  firstName.addEventListener("change", function () {
+    validFirstName(this.value);
+  });
+
+  // validation nom
+  const validLastName = function (input) {
+    let testName = /^[a-zA-Z ,.'-]+$/.test(input);
+
+    if (testName) {
+      lastNameErrorMsg.innerText = "";
+      return true;
+    } else {
+      lastNameErrorMsg.innerText = "Nom incorect";
+      return false;
+    }
+  };
+
+  lastName.addEventListener("change", function () {
+    validLastName(this.value);
+  });
+
+  //validation adresse
+  const validAdresse = function (input) {
+    let testAdresse = /^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+/.test(input);
+
+    if (testAdresse) {
+      addressErrorMsg.innerText = "";
+      return true;
+    } else {
+      addressErrorMsg.innerText = "adresse incorect";
+      return false;
+    }
+  };
+
+  address.addEventListener("change", function () {
+    validAdresse(this.value);
+  });
+
+  // Validation ville
+  const validCountry = function (input) {
+    let testCity = /^[a-zA-Z ,.'-]+$/.test(input);
+
+    if (testCity) {
+      cityErrorMsg.innerText = "";
+      return true;
+    } else {
+      cityErrorMsg.innerText = "Ville incorect";
+      return false;
+    }
+  };
+
+  city.addEventListener("change", function () {
+    validCountry(this.value);
+  });
+
+  // Validation email
+  const validEmail = function (input) {
+    let testEmail = /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/.test(input);
+
+    if (testEmail) {
+      emailErrorMsg.innerText = "";
+      return true;
+    } else {
+      emailErrorMsg.innerText = "Email incorect";
+      return false;
+    }
+  };
+
+  email.addEventListener("change", function () {
+    validEmail(this.value);
+  });
+
+  // CheckOut
+
+  document.querySelector("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (
+      validFirstName(firstName.value) &&
+      validLastName(lastName.value) &&
+      validCountry(city.value) &&
+      validAdresse(address.value) &&
+      validEmail(email.value)
+    ) {
+
+      const idProducts = []
+
+      for (const article of panier) {
+        if (typeof article._id === 'string'){
+          idProducts.push(article._id)
+        }
+      }
+
+      const order = {
+        contact : {
+            firstName: firstName.value,
+            lastName: lastName.value,
+            address: address.value,
+            city: city.value,
+            email: email.value,
+        },
+        products: idProducts,
+    } 
+
+      const options = {
+            method: 'POST',
+            body: JSON.stringify(order),
+            headers: {
+                'Accept': 'application/json', 
+                "Content-Type": "application/json" 
+            },
+        };
+
+        fetch("http://localhost:3000/api/products/order", options)
+        .then((response) => response.json()).then((data => {
+          console.log(data);
+          /* localStorage.clear();
+          localStorage.setItem("orderId", data.orderId);
+
+          document.location.href = "confirmation.html"; */
+        })).catch((err) => {
+          alert ("Problème avec fetch : " + err.message);
+        })
+        
+        
+    
+    }
+  });
+}
+
+// 45. joue la fonction checkout
+checkOut();
