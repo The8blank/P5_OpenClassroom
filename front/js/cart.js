@@ -208,12 +208,9 @@ function supprimer() {
   }
 }
 
-/* 3. joue la fonction create card */
-
-createCard();
-
 async function checkOut() {
-  // Validation prénom
+
+  // 44. Validation prénom
   const validFirstName = function (input) {
     let testName = /^[a-zA-Z ,.'-]+$/.test(input);
 
@@ -230,7 +227,7 @@ async function checkOut() {
     validFirstName(this.value);
   });
 
-  // validation nom
+  // 45. validation nom
   const validLastName = function (input) {
     let testName = /^[a-zA-Z ,.'-]+$/.test(input);
 
@@ -247,7 +244,7 @@ async function checkOut() {
     validLastName(this.value);
   });
 
-  //validation adresse
+  // 46. validation adresse
   const validAdresse = function (input) {
     let testAdresse =
       /^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+/.test(input);
@@ -265,7 +262,7 @@ async function checkOut() {
     validAdresse(this.value);
   });
 
-  // Validation ville
+  // 47. Validation ville
   const validCountry = function (input) {
     let testCity = /^[a-zA-Z ,.'-]+$/.test(input);
 
@@ -282,7 +279,7 @@ async function checkOut() {
     validCountry(this.value);
   });
 
-  // Validation email
+  // 48. Validation email
   const validEmail = function (input) {
     let testEmail =
       /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/.test(input);
@@ -300,10 +297,12 @@ async function checkOut() {
     validEmail(this.value);
   });
 
-  // CheckOut
+  // 49. Ecoute de l'envoie du formulaire
 
   document.querySelector("form").addEventListener("submit", (e) => {
+    // 50. supression du comportement par defaut
     e.preventDefault();
+    // 51. si toute les validation sont vrais
     if (
       validFirstName(firstName.value) &&
       validLastName(lastName.value) &&
@@ -311,14 +310,15 @@ async function checkOut() {
       validAdresse(address.value) &&
       validEmail(email.value)
     ) {
+      // 52. crée le tableau idProduct
       const idProducts = [];
-
+      // 53. met les id des articles dans le tableau idProduct
       for (const article of panier) {
         if (typeof article._id === "string") {
           idProducts.push(article._id);
         }
       }
-
+      // 54. crée l'objet de la commande
       const order = {
         contact: {
           firstName: firstName.value,
@@ -329,7 +329,7 @@ async function checkOut() {
         },
         products: idProducts,
       };
-
+      // 55. crée l'option de la requete 
       const options = {
         method: "POST",
         body: JSON.stringify(order),
@@ -338,15 +338,15 @@ async function checkOut() {
           "Content-Type": "application/json",
         },
       };
-
+      // 56. envoie la commande attend la réponse, envoie l'id de la commande dans le localstorage et nous redirige sur la page de comfirmation 
       fetch("http://localhost:3000/api/products/order", options)
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-          /* localStorage.clear();
+          localStorage.clear();
           localStorage.setItem("orderId", data.orderId);
 
-          document.location.href = "confirmation.html"; */
+          document.location.href = "confirmation.html";
         })
         .catch((err) => {
           alert("Problème avec fetch : " + err.message);
@@ -354,6 +354,9 @@ async function checkOut() {
     }
   });
 }
+
+/* 3. joue la fonction create card */
+createCard();
 
 // 43. joue la fonction checkout
 checkOut();
